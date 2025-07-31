@@ -12,32 +12,50 @@ namespace TestProcessing_1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("gimmefile");
-            var z = Console.ReadLine();
-            var q = File.ReadAllLines(z);
-            Dictionary<string,int> a = new Dictionary<string,int>();
-            for (int i=0; i<q.Length; i++)
+            Console.WriteLine("Please enter the path to the file:");
+            string filePath = Console.ReadLine();
+            string[] lines = File.ReadAllLines(filePath);
+            var wordCounts = new Dictionary<string, int>();
+
+            // for loop to loop through each line in the array
+            for (int i=0; i < lines.Length; i++)
             {
-                var s = Regex.Replace(q[i],@"[^\w\s]", "").ToLower();
-                var t = s.Split(' ');
-                for (int j=0;j<t.Length;j++) 
+                // Cleans the lines
+                string cleanedLine = Regex.Replace(lines[i],@"[^\w\s]", "").ToLower();
+
+                //Splits the now line back into words
+                string[] words = cleanedLine.Split(' ');
+
+                //loops though each word from the split line
+                for (int j = 0; j < words.Length; j++)
                 {
-                    var w = t[j];
-                    if (w != "")
+                    string word = words[j];
+                    // ingnoring the empty strings
+                    if (word != "")
                     {
-                        if (a.ContainsKey(w))
-                            a[w] = a[w] + 1;    
+                        if (wordCounts.ContainsKey(word))
+                        {
+                            wordCounts[word] = wordCounts[word] + 1;
+                        }
                         else
-                            a.Add(w, 1);
+                        {
+                            //adds the new word
+                            wordCounts.Add(word, 1);
+                        }
                     }
                 }
             }
+
             Console.WriteLine("Done");
-            foreach (var e in a)
+
+            //prin
+            foreach (var entry in wordCounts)
             {
-                Console.WriteLine(e.Key + ":" + e.Value);
+                //interpolated
+                Console.WriteLine($"{entry.Key}: {entry.Value}");
             }
-            Console.WriteLine("uniquez = " + a.Count);
+
+            Console.WriteLine($"\nTotal unique words = {wordCounts.Count}");
             Console.ReadKey();
         }
     }
